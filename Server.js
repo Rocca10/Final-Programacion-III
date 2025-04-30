@@ -27,9 +27,9 @@ class Server {
 
 cargarMiddlewares() {
     this.app.use(cors({
-        origin: 'http://localhost:5173', // Cambia este valor por la URL de tu frontend
-        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-        allowedHeaders: ['Content-Type', 'Authorization'], // Cabeceras permitidas
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'x-token']
     }));
     this.app.use(express.json());
 }

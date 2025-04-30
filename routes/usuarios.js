@@ -9,5 +9,6 @@ router.get('/:id',[validarJwt,validarAdmin], getUsuarioById); // Obtener un usua
 router.post('/',[validarJwt,validarAdmin], addUsuario); // Crear un nuevo usuario
 router.delete('/:id',[validarJwt,validarAdmin], deleteById); // Eliminar un usuario por ID
 router.put('/:id',[validarJwt,validarAdmin], updateById);
+router.post('/public', addUsuario); // SIN validarJwt ni validarAdmin
 
 module.exports = router;
