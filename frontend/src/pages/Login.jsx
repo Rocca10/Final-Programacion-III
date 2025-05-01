@@ -17,10 +17,10 @@ const Login = () => {
       localStorage.setItem('token', res.data.token);
       setMensaje('✅ Login exitoso');
 
-      // Redirige al home después de 1 segundo
+      // Redirige al home después de 0.5 segundos
       setTimeout(() => {
         navigate('/home');
-      }, 1000);
+      }, 500);
     } catch (error) {
       setMensaje('❌ Usuario o contraseña incorrectos');
     }

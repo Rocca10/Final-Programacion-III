@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import CarouselRecetas from '../components/CarouselRecetas';
+
 
 const Home = () => {
     const navigate = useNavigate();
@@ -41,24 +43,26 @@ const Home = () => {
                 </div>
             </nav>
 
-
-            {/* ACA CENTRO TODO EL CONTENIDO */}
             <div
-                style={{
-                    marginTop: '56px',
-                    minHeight: 'calc(100vh - 56px)',
-                    width: '100vw',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    padding: '0 1rem', // para evitar que el texto toque los bordes en pantallas chicas
-                }}
-            >
-                <h1 className="display-4 fw-bold">Bienvenido a ROCCETAS 👨‍🍳</h1>
-                <p className="lead">Desde aquí vas a poder explorar, crear y compartir tus recetas favoritas.</p>
-            </div>
+  style={{
+    paddingTop: '70px', // espacio para navbar
+    minHeight: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start', // ya no lo centramos vertical porque hay más contenido
+    alignItems: 'center',
+    textAlign: 'center',
+    paddingInline: '1rem',
+  }}
+>
+  <h1 className="display-4 fw-bold mt-3">Bienvenido a ROCCETAS 👨‍🍳</h1>
+  <p className="lead mb-4">Desde aquí vas a poder explorar, crear y compartir tus recetas favoritas.</p>
+
+  {/* Carrusel debajo del texto */}
+  <CarouselRecetas />
+</div>
+
 
         </>
     );
