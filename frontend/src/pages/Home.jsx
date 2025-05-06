@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import CarouselRecetas from '../components/CarouselRecetas';
 
 
@@ -32,8 +32,9 @@ const Home = () => {
                                     Menú
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end">
-                                    <li><a className="dropdown-item" href="#">Ver Recetas</a></li>
-                                    <li><a className="dropdown-item" href="#">Crear Receta</a></li>
+                                <Link className="dropdown-item" to="/recetas">Ver Recetas</Link>
+                                <li><a className="dropdown-item" href="/ingredientes">Ingredientes</a></li>
+                                <Link className="dropdown-item" to="/crear-receta">Crear Receta</Link>
                                     <li><hr className="dropdown-divider" /></li>
                                     <li><button className="dropdown-item text-danger" onClick={handleLogout}>Cerrar sesión</button></li>
                                 </ul>

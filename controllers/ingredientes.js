@@ -69,7 +69,7 @@ const updateById = async (req, res) => {
     }
 }
 
-const add = async (req, res) => {
+/* const add = async (req, res) => {
     try {
         const { nombre } = req.body; // Obtiene el nombre del ingrediente del cuerpo de la petición
 
@@ -95,7 +95,40 @@ const add = async (req, res) => {
             error: error.message
         });
     }
-};
+}; */
+
+const add = async (req, res) => {
+    try {
+      const { nombre } = req.body;
+  
+      // Verificar si ya existe
+      const ingredienteExistente = await ingredientesModel.getByName(nombre);
+      if (ingredienteExistente) {
+        return res.status(400).json({
+          message: 'El ingrediente ya existe'
+        });
+      }
+  
+      // Asignar imagen automática si no se especifica
+      if (!req.body.foto || req.body.foto.trim() === '') {
+        req.body.foto = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`;
+      }
+  
+      const nuevoIngrediente = req.body;
+      const ingredienteAgregado = await ingredientesModel.add(nuevoIngrediente);
+  
+      res.status(201).json({
+        message: 'Ingrediente agregado exitosamente',
+        ingrediente: ingredienteAgregado
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Hubo un error al agregar el ingrediente',
+        error: error.message
+      });
+    }
+  };
+  
 
 // METODO ADD PARA AGREGAR MULTIPLES INGREDIENTES EN UNA SOLA PETICIÓN
 const addMany = async (req, res) => {
