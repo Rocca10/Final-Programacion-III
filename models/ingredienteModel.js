@@ -53,8 +53,11 @@ const add = async (nuevoIngrediente) => {
 };
 
 const getByName = async (nombre) => {
-    return await Ingrediente.findOne({ nombre });
-};
+    return await Ingrediente.findOne({
+      nombre: { $regex: `^${nombre.trim()}$`, $options: 'i' } // 'i' = ignore case
+    });
+  };
+  
 
 module.exports = {
     Ingrediente,

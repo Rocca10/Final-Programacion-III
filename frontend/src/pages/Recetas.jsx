@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api'; // tu cliente axios
+import Navbar from '../components/Navbar';
 
 const Recetas = () => {
   const [recetas, setRecetas] = useState([]);
@@ -18,6 +19,8 @@ const Recetas = () => {
   }, []);
 
   return (
+    <>
+    <Navbar/>
     <div className="container mt-5">
       <h2 className="text-center mb-4">Recetas</h2>
       <div className="row">
@@ -29,7 +32,7 @@ const Recetas = () => {
                 className="card-img-top"
                 alt={receta.nombre}
                 style={{ height: '200px', objectFit: 'cover' }}
-              />
+                />
               <div className="card-body">
                 <h5 className="card-title">{receta.nombre}</h5>
                 <p className="card-text">{receta.descripcion || 'Sin descripción'}</p>
@@ -39,6 +42,7 @@ const Recetas = () => {
         ))}
       </div>
     </div>
+        </>
   );
 };
 

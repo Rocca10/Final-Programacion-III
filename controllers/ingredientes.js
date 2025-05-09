@@ -97,11 +97,22 @@ const updateById = async (req, res) => {
     }
 }; */
 
+const capitalizarCadaPalabra = (texto) => {
+    return texto
+      .toLowerCase()
+      .replace(/\s+/g, ' ') // reemplaza múltiples espacios por uno solo
+      .trim()
+      .split(' ')
+      .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+      .join(' ');
+  };
+
 const add = async (req, res) => {
     try {
-      const { nombre } = req.body;
+      let { nombre, foto } = req.body;
   
-      // Verificar si ya existe
+      nombre = capitalizarCadaPalabra(nombre.trim());
+  
       const ingredienteExistente = await ingredientesModel.getByName(nombre);
       if (ingredienteExistente) {
         return res.status(400).json({
@@ -109,12 +120,11 @@ const add = async (req, res) => {
         });
       }
   
-      // Asignar imagen automática si no se especifica
-      if (!req.body.foto || req.body.foto.trim() === '') {
-        req.body.foto = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`;
+      if (!foto || foto.trim() === '') {
+        foto = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`;
       }
   
-      const nuevoIngrediente = req.body;
+      const nuevoIngrediente = { nombre, foto };
       const ingredienteAgregado = await ingredientesModel.add(nuevoIngrediente);
   
       res.status(201).json({
@@ -128,6 +138,8 @@ const add = async (req, res) => {
       });
     }
   };
+  
+  
   
 
 // METODO ADD PARA AGREGAR MULTIPLES INGREDIENTES EN UNA SOLA PETICIÓN
