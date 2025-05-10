@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import IngredienteForm from '../components/IngredienteForm';
+import Navbar from '../components/Navbar';
 
 const Ingredientes = () => {
   const [ingredientes, setIngredientes] = useState([]);
@@ -21,6 +22,8 @@ const Ingredientes = () => {
   }, []);
 
   return (
+    <>
+    <Navbar/>
     <div className="container mt-5 pt-4">
       <h2 className="text-center mb-4">Gestión de Ingredientes 🧂</h2>
 
@@ -52,6 +55,7 @@ const Ingredientes = () => {
         </ul>
       )}
     </div>
+      </>
   );
 };
 

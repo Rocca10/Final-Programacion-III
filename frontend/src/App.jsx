@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Recetas from './pages/Recetas';
 import Ingredientes from './pages/Ingredientes';
 import BuscarRecetas from './components/BuscarRecetas';
+import CrearReceta from './components/CrearReceta';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/recetas" element={<Recetas />} />
         <Route path="/ingredientes" element={<Ingredientes />} />
         <Route path='/buscar-recetas' element={<BuscarRecetas/>} />
+        <Route path='/crear-receta' element={<CrearReceta/>}/>
       </Routes>
     </BrowserRouter>
   );

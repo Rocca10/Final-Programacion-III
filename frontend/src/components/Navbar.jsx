@@ -28,11 +28,22 @@ const Navbar = () => {
                 Menú
               </a>
               <ul className="dropdown-menu dropdown-menu-end">
-                <Link className="dropdown-item" to="/recetas">Ver Recetas</Link>
-                <Link className="dropdown-item" to="/ingredientes">Ingredientes</Link>
-                <Link className="dropdown-item" to="/crear-receta">Crear Receta</Link>
-                <Link className="dropdown-item" to="/buscar-recetas">¿Qué puedo cocinar?</Link>
+                {/* Sección Recetas */}
+                <li><h6 className="dropdown-header">Recetas</h6></li>
+                <li><Link className="dropdown-item" to="/recetas">Ver Recetas</Link></li>
+                <li><Link className="dropdown-item" to="/crear-receta">Crear Receta</Link></li>
+                <li><Link className="dropdown-item" to="/buscar-recetas">¿Qué puedo cocinar?</Link></li>
+
                 <li><hr className="dropdown-divider" /></li>
+
+                {/* Sección Ingredientes */}
+                <li><h6 className="dropdown-header">Ingredientes</h6></li>
+                <li><Link className="dropdown-item" to="/ingredientes">Ver Ingredientes</Link></li>
+                <li><Link className="dropdown-item" to="/crear-ingrediente">Crear Ingrediente</Link></li>
+
+                <li><hr className="dropdown-divider" /></li>
+
+                {/* Cierre de sesión */}
                 <li>
                   <button className="dropdown-item text-danger" onClick={handleLogout}>
                     Cerrar sesión

@@ -1,7 +1,8 @@
 const { model } = require("mongoose");
 const recetasModel = require("../models/recetaModel");
+const { buscarImagenUnsplash } = require("../services/unsplashService"); 
 
-const getAll = async (req, res) => {    
+const getAll = async (req, res) => {
     try {
         const recetas = await recetasModel.getAll();
         res.json(recetas);
@@ -12,15 +13,9 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
     const { id } = req.params;
-
     try {
         const receta = await recetasModel.getById(id);
-
-        if (receta) {
-            res.json(receta);
-        } else {
-            res.status(404).json({ error: 'Receta no encontrada' });
-        }
+        receta ? res.json(receta) : res.status(404).json({ error: 'Receta no encontrada' });
     } catch (error) {
         res.status(500).json({ error: 'Hubo un error al obtener la receta' });
     }
@@ -38,23 +33,25 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
     const { id } = req.params;
-   
     try {
         const updatedReceta = await recetasModel.updateById(id, req.body);
-
-        if (updatedReceta) {
-            res.status(200).json({ message: `Receta con ID ${id} actualizada correctamente`, updatedReceta });
-        } else {
-            res.status(404).json({ error: `Receta con ID ${id} no encontrada` });
-        }
+        updatedReceta
+            ? res.status(200).json({ message: `Receta con ID ${id} actualizada correctamente`, updatedReceta })
+            : res.status(404).json({ error: `Receta con ID ${id} no encontrada` });
     } catch (error) {
         res.status(500).json({ error: 'Hubo un error al actualizar la receta' });
     }
-}
+};
 
 const add = async (req, res) => {
     try {
         const nuevaReceta = req.body;
+
+        if (!nuevaReceta.foto || nuevaReceta.foto.trim() === '') {
+            const imagenAI = await buscarImagenUnsplash(nuevaReceta.nombre);
+            nuevaReceta.foto = imagenAI || `https://ui-avatars.com/api/?name=${encodeURIComponent(nuevaReceta.nombre)}&background=random`;
+        }
+
         const recetaAgregada = await recetasModel.add(nuevaReceta);
         res.status(201).json({
             message: 'Receta agregada exitosamente',
@@ -68,17 +65,13 @@ const add = async (req, res) => {
     }
 };
 
-
 const buscarRecetasPorIngredientes = async (req, res) => {
-    const { ingredientes } = req.body; // IDs de ingredientes recibidos en el cuerpo de la solicitud
+    const { ingredientes } = req.body;
     try {
         const recetas = await recetasModel.buscarPorIngredientes(ingredientes);
-
-        if (recetas.length > 0) {
-            res.json(recetas);
-        } else {
-            res.status(404).json({ message: 'No se encontraron recetas con los ingredientes especificados' });
-        }
+        recetas.length > 0
+            ? res.json(recetas)
+            : res.status(404).json({ message: 'No se encontraron recetas con los ingredientes especificados' });
     } catch (error) {
         res.status(500).json({ error: 'Hubo un error al buscar las recetas' });
     }
@@ -87,27 +80,16 @@ const buscarRecetasPorIngredientes = async (req, res) => {
 const buscarPorTipoComida = async (req, res) => {
     try {
         let tipoComida = req.body.tipoComida;
+        if (!tipoComida) return res.status(400).json({ error: 'El parámetro tipoComida es requerido' });
 
-        // Verifica si tipoComida está definido
-        if (!tipoComida) {
-            return res.status(400).json({ error: 'El parámetro tipoComida es requerido' });
-        }
-
-        // Si tipoComida es un string, conviértelo a array (maneja un solo valor o varios separados por comas)
         if (typeof tipoComida === 'string') {
-            tipoComida = tipoComida.includes(',')
-                ? tipoComida.split(',') // Si tiene coma, lo convierte en array
-                : [tipoComida]; // Si no, lo convierte en un array con un solo valor
+            tipoComida = tipoComida.includes(',') ? tipoComida.split(',') : [tipoComida];
         }
 
-        // Llama al modelo con el array de tipoComida
         const recetas = await recetasModel.buscarPorTipoComida(tipoComida);
-
-        if (recetas.length > 0) {
-            res.json(recetas);
-        } else {
-            res.status(404).json({ message: 'No se encontraron recetas para los tipos de comida especificados' });
-        }
+        recetas.length > 0
+            ? res.json(recetas)
+            : res.status(404).json({ message: 'No se encontraron recetas para los tipos de comida especificados' });
     } catch (error) {
         res.status(500).json({ error: 'Hubo un error al buscar las recetas', detalle: error.message });
     }
@@ -123,12 +105,6 @@ const calcularCostoReceta = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
 module.exports = {
     getAll,
     getById,
@@ -138,5 +114,4 @@ module.exports = {
     buscarRecetasPorIngredientes,
     buscarPorTipoComida,
     calcularCostoReceta
-
-}
+};

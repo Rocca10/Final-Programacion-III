@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import Navbar from './Navbar';
 
 const BuscarRecetas = () => {
   const [ingredientes, setIngredientes] = useState([]);
@@ -40,7 +41,9 @@ const BuscarRecetas = () => {
   };
 
   return (
-    <div className="container mt-5 pt-4">
+    <>    
+    <Navbar />
+    <div className="container mt-5 pt-5">
       <h2 className="text-center mb-4">¿Qué puedo cocinar? 🍽️</h2>
 
       {/* Selección de ingredientes */}
@@ -56,7 +59,7 @@ const BuscarRecetas = () => {
                   value={ing._id}
                   id={`ing-${ing._id}`}
                   onChange={() => handleCheck(ing._id)}
-                />
+                  />
                 <label className="form-check-label" htmlFor={`ing-${ing._id}`}>
                   {ing.nombre}
                 </label>
@@ -91,6 +94,7 @@ const BuscarRecetas = () => {
         </div>
       )}
     </div>
+      </>
   );
 };
 
