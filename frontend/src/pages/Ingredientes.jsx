@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import IngredienteForm from '../components/IngredienteForm';
 import Navbar from '../components/Navbar';
+import { motion } from 'framer-motion';
 
 // Función para verificar si el usuario logueado es admin
 const getEsAdmin = () => {
@@ -43,29 +44,49 @@ const Ingredientes = () => {
         {/* Formulario solo para admin */}
         {esAdmin && <IngredienteForm onSuccess={cargarIngredientes} />}
 
-        {/* Listado */}
+        {/* Listado visual de ingredientes */}
         {loading ? (
           <p>Cargando ingredientes...</p>
         ) : ingredientes.length === 0 ? (
           <p>No hay ingredientes aún.</p>
         ) : (
-          <ul className="list-group">
-            {ingredientes.map((ingrediente) => (
-              <li key={ingrediente._id} className="list-group-item d-flex align-items-center gap-3">
-                <img
-                  src={
-                    ingrediente.foto ||
-                    `https://ui-avatars.com/api/?name=${encodeURIComponent(ingrediente.nombre)}&background=random`
-                  }
-                  alt={ingrediente.nombre}
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: '50%', objectFit: 'cover' }}
-                />
-                <span className="fw-semibold">{ingrediente.nombre}</span>
-              </li>
+          <div className="row justify-content-center">
+            {ingredientes.map((ing) => (
+              <motion.div
+                key={ing._id}
+                className="col-4 col-sm-3 col-md-2 mb-4 text-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div
+                  style={{
+                    border: '2px solid #ccc',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    backgroundColor: '#f9f9f9',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  <img
+                    src={
+                      ing.foto ||
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(ing.nombre)}&background=random`
+                    }
+                    alt={ing.nombre}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      objectFit: 'cover',
+                      borderRadius: '50%',
+                      marginBottom: '0.5rem',
+                    }}
+                  />
+                  <div style={{ fontWeight: 'bold' }}>{ing.nombre}</div>
+                </div>
+              </motion.div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </>

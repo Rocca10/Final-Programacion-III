@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CarouselRecetas from '../components/CarouselRecetas';
 import Navbar from '../components/Navbar';
 import api from '../services/api';
+import { motion } from 'framer-motion';
 
 const Home = () => {
   const [recetas, setRecetas] = useState([]);
@@ -25,8 +26,10 @@ const Home = () => {
   return (
     <>
       <Navbar />
-
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
         style={{
           paddingTop: '90px',
           width: '100%',
@@ -37,8 +40,13 @@ const Home = () => {
           paddingInline: '1.5rem',
         }}
       >
-        {/* Título */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem', maxWidth: '800px' }}>
+        {/* Título principal */}
+        <motion.div
+          style={{ textAlign: 'center', marginBottom: '3rem', maxWidth: '800px' }}
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <h1
             style={{
               fontSize: '3.2rem',
@@ -61,10 +69,13 @@ const Home = () => {
           >
             Descubrí, creá y compartí tus recetas favoritas con estilo.
           </p>
-        </div>
+        </motion.div>
 
         {/* Carrusel */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
           style={{
             width: '90%',
             maxWidth: '1200px',
@@ -75,9 +86,9 @@ const Home = () => {
           }}
         >
           <CarouselRecetas />
-        </div>
+        </motion.div>
 
-        {/* Sección Recetas + ¿Qué puedo cocinar? */}
+        {/* Secciones: recetas y buscador */}
         <div
           style={{
             width: '100%',
@@ -90,7 +101,11 @@ const Home = () => {
           }}
         >
           {/* Recetas destacadas */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.01 }}
             style={{
               flex: '1 1 500px',
               backgroundImage: "url('/images/default-receta.png')",
@@ -124,28 +139,38 @@ const Home = () => {
                 Recetas destacadas ✨
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                {recetas.map((receta) => (
-                  <div
-                    key={receta._id}
-                    style={{
-                      display: 'flex',
-                      gap: '1rem',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      background: '#ffffff',
-                      boxShadow: '0 5px 10px rgba(0,0,0,0.05)',
-                      color: '#000',
-                    }}
-                  >
+{recetas.map((receta) => (
+  <Link
+    to={`/recetas/${receta._id}`}
+    key={receta._id}
+    style={{ textDecoration: 'none' }}
+  >
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      style={{
+        display: 'flex',
+        gap: '1rem',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        background: '#ffffff',
+        boxShadow: '0 5px 10px rgba(0,0,0,0.05)',
+        color: '#000',
+        padding: '0.75rem 1rem',
+        transition: '0.2s',
+      }}
+    >
+      <div>
+        <h6 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>
+          {receta.nombre}
+        </h6>
+        <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
+          {receta.tipoComida} - {receta.tipoCocina}
+        </p>
+      </div>
+    </motion.div>
+  </Link>
+))}
 
-                    <div style={{ padding: '0.5rem 0', flex: 1 }}>
-                      <h6 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>{receta.nombre}</h6>
-                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
-                        {receta.tipoComida} - {receta.tipoCocina}
-                      </p>
-                    </div>
-                  </div>
-                ))}
               </div>
               <div style={{ textAlign: 'center', marginTop: '2rem' }}>
                 <Link to="/recetas" className={botonEstilo}>
@@ -153,10 +178,14 @@ const Home = () => {
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ¿Qué puedo cocinar? */}
-          <div
+          {/* Buscador de recetas */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.01 }}
             style={{
               flex: '1 1 500px',
               backgroundImage: "url('/images/chef-thinking.png')",
@@ -188,16 +217,15 @@ const Home = () => {
                 ¿Qué puedo cocinar? 🍳
               </h2>
               <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
-                
+                Seleccioná los ingredientes que tenés y descubrí recetas mágicas con ellos.
               </p>
               <Link to="/buscar-recetas" className={botonEstilo}>
                 Ir al buscador de recetas
               </Link>
-
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

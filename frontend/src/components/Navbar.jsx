@@ -51,7 +51,6 @@ const Navbar = () => {
                 {/* Sección Ingredientes */}
                 <li><h6 className="dropdown-header">Ingredientes</h6></li>
                 <li><Link className="dropdown-item" to="/ingredientes">Ver Ingredientes</Link></li>
-                <li><Link className="dropdown-item" to="/crear-ingrediente">Crear Ingrediente</Link></li>
 
                 <li><hr className="dropdown-divider" /></li>
 

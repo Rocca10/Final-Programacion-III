@@ -3,11 +3,12 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Recetas from './pages/Recetas';
 import Ingredientes from './pages/Ingredientes';
-import BuscarRecetas from './components/BuscarRecetas';
+import BuscarRecetas from './pages/BuscarRecetas';
 import CrearReceta from './components/CrearReceta';
 import Registro from './pages/Registro';
 import UsuariosAdmin from './pages/UsuariosAdmin';
 import Perfil from './pages/Perfil';
+import RecetaDetalle from './pages/RecetaDetalle';
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         <Route path='/crear-receta' element={<CrearReceta/>}/>
         <Route path='/admin/usuarios' element={<UsuariosAdmin/>}/>
         <Route path='/perfil' element={<Perfil/>}/>
+        <Route path="/recetas/:id" element={<RecetaDetalle />} />
+
       </Routes>
     </BrowserRouter>
   );
