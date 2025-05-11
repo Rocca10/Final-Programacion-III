@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api'; // tu cliente axios
 import Navbar from '../components/Navbar';
+import { motion } from 'framer-motion';
 
 const Recetas = () => {
   const [recetas, setRecetas] = useState([]);
@@ -20,30 +21,52 @@ const Recetas = () => {
 
   return (
     <>
-    <Navbar/>
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Recetas</h2>
-      <div className="row">
-        {recetas.map((receta) => (
-          <div className="col-md-4 mb-4" key={receta._id}>
-            <div className="card h-100">
-            <img
-  src={receta.foto || '/images/default-receta.jpg'}
-  className="card-img-top"
-  alt={receta.nombre}
-  style={{ height: '200px', objectFit: 'cover' }}
-/>
+      <Navbar />
+      <div className="container mt-5">
+        <motion.h2
+          className="text-center mb-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            color: '#343a40',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
+          }}
+        >
+          🍴 Nuestras Recetas Destacadas
+        </motion.h2>
 
-              <div className="card-body">
-                <h5 className="card-title">{receta.nombre}</h5>
-                <p className="card-text">{receta.descripcion || 'Sin descripción'}</p>
-              </div>
+        <div className="row">
+          {recetas.map((receta) => (
+            <div className="col-md-4 mb-4" key={receta._id}>
+              <motion.div
+                className="card h-100 shadow-sm"
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <img
+                  src={receta.foto || '/images/default-receta.jpg'}
+                  className="card-img-top"
+                  alt={receta.nombre}
+                  style={{ height: '200px', objectFit: 'cover' }}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{receta.nombre}</h5>
+                  <p className="card-text">
+                    {receta.descripcion || 'Sin descripción'}
+                  </p>
+                </div>
+              </motion.div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-        </>
+    </>
   );
 };
 

@@ -5,17 +5,24 @@ import Recetas from './pages/Recetas';
 import Ingredientes from './pages/Ingredientes';
 import BuscarRecetas from './components/BuscarRecetas';
 import CrearReceta from './components/CrearReceta';
+import Registro from './pages/Registro';
+import UsuariosAdmin from './pages/UsuariosAdmin';
+import Perfil from './pages/Perfil';
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/Registro" element={<Registro />} />
         <Route path="/home" element={<Home />} />
         <Route path="/recetas" element={<Recetas />} />
         <Route path="/ingredientes" element={<Ingredientes />} />
         <Route path='/buscar-recetas' element={<BuscarRecetas/>} />
         <Route path='/crear-receta' element={<CrearReceta/>}/>
+        <Route path='/admin/usuarios' element={<UsuariosAdmin/>}/>
+        <Route path='/perfil' element={<Perfil/>}/>
       </Routes>
     </BrowserRouter>
   );

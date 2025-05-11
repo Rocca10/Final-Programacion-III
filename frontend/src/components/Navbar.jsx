@@ -1,8 +1,20 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
+const esAdmin = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role === 'ADMIN';
+  } catch {
+    return false;
+  }
+};
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const admin = esAdmin();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -43,7 +55,17 @@ const Navbar = () => {
 
                 <li><hr className="dropdown-divider" /></li>
 
-                {/* Cierre de sesión */}
+                {/* Solo admins */}
+                {admin && (
+                  <>
+                    <li><h6 className="dropdown-header">Administración</h6></li>
+                    <li><Link className="dropdown-item" to="/admin/usuarios">Usuarios</Link></li>
+                    <li><hr className="dropdown-divider" /></li>
+                  </>
+                )}
+
+                {/* Perfil y cierre de sesión */}
+                <li><Link className="dropdown-item" to="/perfil">Mi perfil</Link></li>
                 <li>
                   <button className="dropdown-item text-danger" onClick={handleLogout}>
                     Cerrar sesión

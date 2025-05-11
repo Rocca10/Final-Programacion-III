@@ -23,7 +23,9 @@ const login = async (req, res) => {
             });
         }
         // Generar el JWT con el id del usuario
-        const token = await generarJWT(usuario._id);
+        /* const token = await generarJWT(usuario._id); */ //Este andaba bien
+        const token = await generarJWT(usuario);
+
 
         res.json({
             usuario: usuario.username,  // Aquí devuelves el nombre del usuario
@@ -39,12 +41,16 @@ const login = async (req, res) => {
     }
 }
 
-const generarJWT = (userId) => {
+const generarJWT = (usuario) => {
     return new Promise((resolve, reject) => {
-        const payload = { id: userId };  // Usar solo el ID del usuario
+        const payload = {
+            id: usuario._id,
+            username: usuario.username,
+            role: usuario.role, // 👈 esto es lo importante
+        };
 
         jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
-            expiresIn: '2h'  // Token expira en 2 horas
+            expiresIn: '2h',
         }, (err, token) => {
             if (err) {
                 console.log(err);
@@ -54,7 +60,8 @@ const generarJWT = (userId) => {
             }
         });
     });
-}
+};
+
 
 module.exports = {
     login

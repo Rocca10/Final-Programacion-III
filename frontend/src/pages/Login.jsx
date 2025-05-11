@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+import { Link } from "react-router-dom"; // arriba del archivo
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [mensaje, setMensaje] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     // Quitar padding-top del body en login
-    document.body.classList.add('sin-navbar');
+    document.body.classList.add("sin-navbar");
 
     // Limpiar al desmontar
     return () => {
-      document.body.classList.remove('sin-navbar');
+      document.body.classList.remove("sin-navbar");
     };
   }, []);
 
@@ -22,16 +23,16 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await api.post('/login', { username, password });
+      const res = await api.post("/login", { username, password });
 
-      localStorage.setItem('token', res.data.token);
-      setMensaje('✅ Login exitoso');
+      localStorage.setItem("token", res.data.token);
+      setMensaje("✅ Login exitoso");
 
       setTimeout(() => {
-        navigate('/home');
+        navigate("/home");
       }, 500);
     } catch (error) {
-      setMensaje('❌ Usuario o contraseña incorrectos');
+      setMensaje("❌ Usuario o contraseña incorrectos");
     }
   };
 
@@ -39,14 +40,14 @@ const Login = () => {
     <>
       <h1
         style={{
-          position: 'absolute',
-          top: '60px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          color: 'white',
-          fontSize: '3.5rem',
-          fontWeight: '900',
-          textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
+          position: "absolute",
+          top: "60px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          color: "white",
+          fontSize: "3.5rem",
+          fontWeight: "900",
+          textShadow: "2px 2px 6px rgba(0,0,0,0.7)",
           zIndex: 10,
         }}
       >
@@ -55,24 +56,24 @@ const Login = () => {
 
       <div
         style={{
-          minHeight: '100vh',
-          minWidth: '100vw',
+          minHeight: "100vh",
+          minWidth: "100vw",
           backgroundImage: 'url("/images/fondo-recetas.jpg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <div
           className="card p-4 shadow"
           style={{
-            width: '100%',
-            maxWidth: '400px',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '12px',
+            width: "100%",
+            maxWidth: "400px",
+            backgroundColor: "rgba(255, 255, 255, 0.95)",
+            borderRadius: "12px",
           }}
         >
           <h3 className="text-center mb-4">Iniciar Sesión</h3>
@@ -101,6 +102,10 @@ const Login = () => {
               Ingresar
             </button>
           </form>
+
+          <p className="mt-3 text-center">
+            ¿No tenés cuenta? <Link to="/registro">Registrate</Link>
+          </p>
 
           {mensaje && (
             <div className="alert alert-info mt-3 text-center">{mensaje}</div>

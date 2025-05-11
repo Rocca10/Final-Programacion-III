@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import Navbar from './Navbar';
+import { motion } from 'framer-motion';
 
 const BuscarRecetas = () => {
   const [ingredientes, setIngredientes] = useState([]);
@@ -12,7 +13,7 @@ const BuscarRecetas = () => {
     const cargarIngredientes = async () => {
       try {
         const res = await api.get('/ingredientes');
-        setIngredientes(res.data);
+        setIngredientes(res.data.sort((a, b) => a.nombre.localeCompare(b.nombre)));
       } catch (err) {
         console.error('Error al cargar ingredientes', err);
       }
@@ -44,9 +45,18 @@ const BuscarRecetas = () => {
     <>
       <Navbar />
       <div className="container mt-5 pt-5">
-        <h2 className="text-center mb-4">¿Qué puedo cocinar? 🍽️</h2>
+        {/* Título animado */}
+        <motion.h2
+          className="text-center mb-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#333' }}
+        >
+          ¿Qué puedo cocinar? 🍽️
+        </motion.h2>
 
-        {/* Ingredientes como íconos seleccionables */}
+        {/* Ingredientes */}
         <div className="mb-4">
           <h5>Seleccioná los ingredientes que tenés:</h5>
           <div className="row justify-content-center">
@@ -90,20 +100,39 @@ const BuscarRecetas = () => {
           </div>
         </div>
 
-        {/* Resultados */}
-        {mensaje && <div className="alert alert-warning">{mensaje}</div>}
+        {/* Mensaje de error con animación */}
+        {mensaje && (
+          <motion.div
+            className="alert alert-warning"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            {mensaje}
+          </motion.div>
+        )}
+
+        {/* Resultados con animación */}
         {recetas.length > 0 && (
           <div className="mt-4">
             <h4>Recetas encontradas:</h4>
             <div className="row">
               {recetas.map((receta) => (
                 <div className="col-md-4" key={receta._id}>
-                  <div className="card mb-3">
-                    <img
-                      src={receta.foto}
-                      className="card-img-top"
-                      alt={receta.nombre}
-                    />
+                  <motion.div
+                    className="card mb-3"
+                    whileHover={{ scale: 1.02 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                <img
+                  src={receta.foto}
+                  className="card-img-top"
+                  alt={receta.nombre}
+                  style={{ height: '200px', objectFit: 'cover', width: '100%' }} //Con esto hago que todos tengan el mismo tamaño.
+                />
+
                     <div className="card-body">
                       <h5 className="card-title">{receta.nombre}</h5>
                       <p className="card-text">
@@ -111,7 +140,7 @@ const BuscarRecetas = () => {
                         Cocina: {receta.tipoCocina}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               ))}
             </div>
