@@ -34,7 +34,7 @@ const IngredienteForm = ({ onSuccess }) => {
       </div>
 
       <div className="mb-3">
-        <label className="form-label">URL de la foto</label>
+        <label className="form-label">URL de la foto (En caso de no especificar, sera asignada con IA)</label>
         <input
           type="text"
           className="form-control"

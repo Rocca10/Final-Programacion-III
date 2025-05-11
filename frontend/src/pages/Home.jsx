@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CarouselRecetas from '../components/CarouselRecetas';
 import Navbar from '../components/Navbar';
 import api from '../services/api';
 
 const Home = () => {
-  const navigate = useNavigate();
   const [recetas, setRecetas] = useState([]);
 
   useEffect(() => {
     const cargarRecetas = async () => {
       try {
         const res = await api.get('/recetas');
-        setRecetas(res.data.slice(0, 3)); // Tomamos las primeras 3
+        setRecetas(res.data.slice(0, 3));
       } catch (err) {
         console.error('Error al cargar recetas destacadas', err);
       }
@@ -21,6 +20,8 @@ const Home = () => {
     cargarRecetas();
   }, []);
 
+  const botonEstilo = "btn btn-warning btn-lg text-white shadow";
+
   return (
     <>
       <Navbar />
@@ -28,7 +29,6 @@ const Home = () => {
       <div
         style={{
           paddingTop: '90px',
-          minHeight: '100vh',
           width: '100%',
           background: '#fffdf9',
           display: 'flex',
@@ -37,7 +37,7 @@ const Home = () => {
           paddingInline: '1.5rem',
         }}
       >
-        {/* Encabezado */}
+        {/* Título */}
         <div style={{ textAlign: 'center', marginBottom: '3rem', maxWidth: '800px' }}>
           <h1
             style={{
@@ -77,57 +77,124 @@ const Home = () => {
           <CarouselRecetas />
         </div>
 
-        {/* Recetas destacadas */}
-        <div style={{ width: '100%', maxWidth: '1200px' }}>
-          <h2
+        {/* Sección Recetas + ¿Qué puedo cocinar? */}
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '1200px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '2rem',
+            justifyContent: 'center',
+            marginBottom: '5rem',
+          }}
+        >
+          {/* Recetas destacadas */}
+          <div
             style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: '2rem',
-              marginBottom: '2rem',
-              color: '#2e2e2e',
-              textAlign: 'center',
+              flex: '1 1 500px',
+              backgroundImage: "url('/images/default-receta.png')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              padding: '2rem',
+              borderRadius: '20px',
+              boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
+              position: 'relative',
+              overflow: 'hidden',
+              color: 'white',
             }}
           >
-            Recetas destacadas ✨
-          </h2>
-
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {recetas.map((receta) => (
-              <div
-                key={receta._id}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                zIndex: 0,
+              }}
+            />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <h2
                 style={{
-                  width: '300px',
-                  borderRadius: '15px',
-                  overflow: 'hidden',
-                  background: '#fff',
-                  boxShadow: '0 10px 20px rgba(0,0,0,0.06)',
-                  textAlign: 'left',
-                  transition: 'transform 0.3s',
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: '2rem',
+                  marginBottom: '1.5rem',
+                  textAlign: 'center',
                 }}
               >
-                <img
-                  src={receta.foto || '/images/default-receta.jpg'}
-                  alt={receta.nombre}
-                  style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                />
-                <div style={{ padding: '1rem' }}>
-                  <h5 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem' }}>
-                    {receta.nombre}
-                  </h5>
-                  <p style={{ fontSize: '0.95rem', color: '#555' }}>
-                    Tipo: {receta.tipoComida} <br />
-                    Cocina: {receta.tipoCocina}
-                  </p>
-                </div>
+                Recetas destacadas ✨
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {recetas.map((receta) => (
+                  <div
+                    key={receta._id}
+                    style={{
+                      display: 'flex',
+                      gap: '1rem',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      background: '#ffffff',
+                      boxShadow: '0 5px 10px rgba(0,0,0,0.05)',
+                      color: '#000',
+                    }}
+                  >
+
+                    <div style={{ padding: '0.5rem 0', flex: 1 }}>
+                      <h6 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>{receta.nombre}</h6>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
+                        {receta.tipoComida} - {receta.tipoCocina}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+              <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <Link to="/recetas" className={botonEstilo}>
+                  Ver todas las recetas
+                </Link>
+              </div>
+            </div>
           </div>
 
-          {/* Botón para ver más */}
-          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-            <Link to="/recetas" className="btn btn-outline-dark btn-lg">
-              Ver todas las recetas
-            </Link>
+          {/* ¿Qué puedo cocinar? */}
+          <div
+            style={{
+              flex: '1 1 500px',
+              backgroundImage: "url('/images/chef-thinking.png')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              padding: '2.5rem',
+              borderRadius: '20px',
+              boxShadow: '0 15px 40px rgba(0,0,0,0.05)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textAlign: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+              color: 'white',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                zIndex: 0,
+              }}
+            />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2rem', marginBottom: '1rem' }}>
+                ¿Qué puedo cocinar? 🍳
+              </h2>
+              <p style={{ fontSize: '1.1rem', marginBottom: '2rem' }}>
+                
+              </p>
+              <Link to="/buscar-recetas" className={botonEstilo}>
+                Ir al buscador de recetas
+              </Link>
+
+            </div>
           </div>
         </div>
       </div>

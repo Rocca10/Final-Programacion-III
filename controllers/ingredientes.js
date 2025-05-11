@@ -1,73 +1,80 @@
 const ingredientesModel = require("../models/ingredienteModel");
+const { buscarImagenUnsplash } = require("../services/unsplashService");
 
-
-const getTodos = async (req, res) => {    
-    try {
-        const ingredientes = await ingredientesModel.getTodos();
-        res.json(ingredientes);
-    } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al obtener los ingredientes' });
-    }
-}
-
-const getById = async (req, res) => {
-    const { id } = req.params;
-   
-    try {
-        const ingrediente = await ingredientesModel.getById(id);
-
-        if (ingrediente) {
-            res.json(ingrediente);
-        } else {
-            res.status(404).json({ id, encontrado: false });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al obtener el ingrediente' });
-    }
-}
-
-const deleteById = async (req, res) => {
-    const { id } = req.params;
-    try {
-        // Eliminar el ingrediente y sus recetas asociadas
-        const result = await ingredientesModel.deleteById(id);
-
-        // Verificar si el ingrediente y las recetas asociadas fueron eliminados
-        if (result.ingredienteEliminado) {
-            res.status(200).json({
-                message: `Ingrediente con ID ${id} y ${result.recetasEliminadas} recetas asociadas eliminadas correctamente.`
-            });
-        } else {
-            // Si no se encuentra el ingrediente
-            res.status(404).json({
-                error: `Ingrediente con ID ${id} no encontrado en la base de datos.`
-            });
-        }
-    } catch (error) {
-        console.error('Error en el controlador de eliminación:', error.message);
-        res.status(500).json({
-            error: `Hubo un problema al intentar eliminar el ingrediente y sus recetas asociadas. Detalles: ${error.message}`
-        });
-    }
+const getTodos = async (req, res) => {
+  try {
+    const ingredientes = await ingredientesModel.getTodos();
+    res.json(ingredientes);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Hubo un error al obtener los ingredientes" });
+  }
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const ingrediente = await ingredientesModel.getById(id);
+
+    if (ingrediente) {
+      res.json(ingrediente);
+    } else {
+      res.status(404).json({ id, encontrado: false });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error al obtener el ingrediente" });
+  }
+};
+
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Eliminar el ingrediente y sus recetas asociadas
+    const result = await ingredientesModel.deleteById(id);
+
+    // Verificar si el ingrediente y las recetas asociadas fueron eliminados
+    if (result.ingredienteEliminado) {
+      res.status(200).json({
+        message: `Ingrediente con ID ${id} y ${result.recetasEliminadas} recetas asociadas eliminadas correctamente.`,
+      });
+    } else {
+      // Si no se encuentra el ingrediente
+      res.status(404).json({
+        error: `Ingrediente con ID ${id} no encontrado en la base de datos.`,
+      });
+    }
+  } catch (error) {
+    console.error("Error en el controlador de eliminación:", error.message);
+    res.status(500).json({
+      error: `Hubo un problema al intentar eliminar el ingrediente y sus recetas asociadas. Detalles: ${error.message}`,
+    });
+  }
+};
 
 const updateById = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-   
-    try {
-        const updatedIngrediente = await ingredientesModel.updateById(id, req.body);
+  try {
+    const updatedIngrediente = await ingredientesModel.updateById(id, req.body);
 
-        if (updatedIngrediente) {
-            res.status(200).json({ message: `Ingrediente con ID ${id} actualizado correctamente`, updatedIngrediente });
-        } else {
-            res.status(404).json({ error: `Ingrediente con ID ${id} no encontrado` });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al actualizar el ingrediente' });
+    if (updatedIngrediente) {
+      res
+        .status(200)
+        .json({
+          message: `Ingrediente con ID ${id} actualizado correctamente`,
+          updatedIngrediente,
+        });
+    } else {
+      res.status(404).json({ error: `Ingrediente con ID ${id} no encontrado` });
     }
-}
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Hubo un error al actualizar el ingrediente" });
+  }
+};
 
 /* const add = async (req, res) => {
     try {
@@ -98,78 +105,79 @@ const updateById = async (req, res) => {
 }; */
 
 const capitalizarCadaPalabra = (texto) => {
-    return texto
-      .toLowerCase()
-      .replace(/\s+/g, ' ') // reemplaza múltiples espacios por uno solo
-      .trim()
-      .split(' ')
-      .map(p => p.charAt(0).toUpperCase() + p.slice(1))
-      .join(' ');
-  };
+  return texto
+    .toLowerCase()
+    .replace(/\s+/g, " ") // reemplaza múltiples espacios por uno solo
+    .trim()
+    .split(" ")
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+    .join(" ");
+};
 
 const add = async (req, res) => {
-    try {
-      let { nombre, foto } = req.body;
-  
-      nombre = capitalizarCadaPalabra(nombre.trim());
-  
-      const ingredienteExistente = await ingredientesModel.getByName(nombre);
-      if (ingredienteExistente) {
-        return res.status(400).json({
-          message: 'El ingrediente ya existe'
-        });
-      }
-  
-      if (!foto || foto.trim() === '') {
-        foto = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`;
-      }
-  
-      const nuevoIngrediente = { nombre, foto };
-      const ingredienteAgregado = await ingredientesModel.add(nuevoIngrediente);
-  
-      res.status(201).json({
-        message: 'Ingrediente agregado exitosamente',
-        ingrediente: ingredienteAgregado
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: 'Hubo un error al agregar el ingrediente',
-        error: error.message
+  try {
+    let { nombre, foto } = req.body;
+
+    nombre = capitalizarCadaPalabra(nombre.trim());
+
+    const ingredienteExistente = await ingredientesModel.getByName(nombre);
+    if (ingredienteExistente) {
+      return res.status(400).json({
+        message: "El ingrediente ya existe",
       });
     }
-  };
-  
-  
-  
+
+    if (!foto || foto.trim() === "") {
+      foto = await buscarImagenUnsplash(nombre);
+      if (!foto) {
+        foto = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          nombre
+        )}&background=random`;
+      }
+    }
+
+    const nuevoIngrediente = { nombre, foto };
+    const ingredienteAgregado = await ingredientesModel.add(nuevoIngrediente);
+
+    res.status(201).json({
+      message: "Ingrediente agregado exitosamente",
+      ingrediente: ingredienteAgregado,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Hubo un error al agregar el ingrediente",
+      error: error.message,
+    });
+  }
+};
 
 // METODO ADD PARA AGREGAR MULTIPLES INGREDIENTES EN UNA SOLA PETICIÓN
 const addMany = async (req, res) => {
-    try {
-        const nuevosIngredientes = req.body; // Obtiene el array de ingredientes del cuerpo de la petición
-        const ingredientesActualizados = await Promise.all(
-            nuevosIngredientes.map(async (nuevoIngrediente) => {
-                return await ingredientesModel.add(nuevoIngrediente);
-            })
-        );
-        
-        res.status(201).json({
-            message: 'Ingredientes agregados exitosamente',
-            ingredientes: ingredientesActualizados // Retorna el array actualizado
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: 'Hubo un error al agregar los ingredientes',
-            error: error.message
-        });
-    }
-}
+  try {
+    const nuevosIngredientes = req.body; // Obtiene el array de ingredientes del cuerpo de la petición
+    const ingredientesActualizados = await Promise.all(
+      nuevosIngredientes.map(async (nuevoIngrediente) => {
+        return await ingredientesModel.add(nuevoIngrediente);
+      })
+    );
 
+    res.status(201).json({
+      message: "Ingredientes agregados exitosamente",
+      ingredientes: ingredientesActualizados, // Retorna el array actualizado
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Hubo un error al agregar los ingredientes",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
-    getTodos,
-    getById,
-    deleteById,
-    updateById,
-    add,
-    addMany
-}
+  getTodos,
+  getById,
+  deleteById,
+  updateById,
+  add,
+  addMany,
+};

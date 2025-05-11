@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const CrearReceta = () => {
   const navigate = useNavigate();
@@ -59,6 +60,8 @@ const CrearReceta = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="container pt-5 mt-5">
       <h2 className="mb-4">Crear Nueva Receta 🍽️</h2>
 
@@ -181,7 +184,7 @@ const CrearReceta = () => {
               placeholder="Cantidad"
               value={nuevoIngrediente.cantidad}
               onChange={(e) => setNuevoIngrediente({ ...nuevoIngrediente, cantidad: e.target.value })}
-            />
+              />
           </div>
           <div className="col-md-3">
             <select className="form-select" value={nuevoIngrediente.unidad} onChange={(e) => setNuevoIngrediente({ ...nuevoIngrediente, unidad: e.target.value })}>
@@ -216,6 +219,7 @@ const CrearReceta = () => {
         <button type="submit" className="btn btn-success mt-4">Guardar Receta</button>
       </form>
     </div>
+        </>
   );
 };
 

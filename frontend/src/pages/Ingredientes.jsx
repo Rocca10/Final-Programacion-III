@@ -10,7 +10,7 @@ const Ingredientes = () => {
   const cargarIngredientes = async () => {
     try {
       const res = await api.get('/ingredientes');
-      setIngredientes(res.data);
+      setIngredientes(res.data.sort((a, b) => a.nombre.localeCompare(b.nombre))); // Ahi los ordeno por nombre
       setLoading(false);
     } catch (error) {
       console.error('Error al cargar ingredientes', error);

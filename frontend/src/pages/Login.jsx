@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 👈 Para redirigir
-import api from '../services/api'; // Axios configurado
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
-  const navigate = useNavigate(); // Habilita redirección
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Quitar padding-top del body en login
+    document.body.classList.add('sin-navbar');
+
+    // Limpiar al desmontar
+    return () => {
+      document.body.classList.remove('sin-navbar');
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +27,6 @@ const Login = () => {
       localStorage.setItem('token', res.data.token);
       setMensaje('✅ Login exitoso');
 
-      // Redirige al home después de 0.5 segundos
       setTimeout(() => {
         navigate('/home');
       }, 500);
@@ -28,7 +37,6 @@ const Login = () => {
 
   return (
     <>
-      {/* Título principal sobre la imagen */}
       <h1
         style={{
           position: 'absolute',
@@ -45,7 +53,6 @@ const Login = () => {
         ROCCETAS
       </h1>
 
-      {/* Fondo y formulario */}
       <div
         style={{
           minHeight: '100vh',
