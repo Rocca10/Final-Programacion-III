@@ -3,17 +3,15 @@ import { Carousel } from 'react-bootstrap';
 
 const CarouselRecetas = () => {
   const containerStyle = {
-    width: '100%',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    borderRadius: '12px',
+    width: '100vw',          // 👉 ancho completo de la ventana
+    height: '100%',          // altura automática
     overflow: 'hidden',
-    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
+    borderRadius: 0,         // sin bordes redondeados
   };
 
   const imgStyle = {
     width: '100%',
-    height: '450px',
+    height: '500px',         // ajustá la altura según tu diseño
     objectFit: 'cover',
     objectPosition: 'center',
   };

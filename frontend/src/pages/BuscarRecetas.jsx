@@ -46,7 +46,6 @@ const BuscarRecetas = () => {
     <>
       <Navbar />
       <div className="container mt-5 pt-5">
-        {/* Título */}
         <motion.h2
           className="text-center mb-4"
           initial={{ opacity: 0, y: -20 }}
@@ -64,33 +63,38 @@ const BuscarRecetas = () => {
             {ingredientes.map((ing) => {
               const seleccionado = seleccionados.includes(ing._id);
               return (
-                <div
+                <motion.div
                   key={ing._id}
                   className="col-4 col-sm-3 col-md-2 mb-3 text-center"
                   onClick={() => handleCheck(ing._id)}
-                  style={{
-                    cursor: 'pointer',
-                    border: seleccionado ? '3px solid #28a745' : '2px solid #ccc',
-                    borderRadius: '10px',
-                    padding: '10px',
-                    transition: 'all 0.2s',
-                    backgroundColor: seleccionado ? '#eafaf1' : 'white',
-                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <img
-                    src={ing.foto}
-                    alt={ing.nombre}
+                  <div
                     style={{
-                      width: '60px',
-                      height: '60px',
-                      objectFit: 'cover',
-                      borderRadius: '50%',
-                      marginBottom: '0.5rem',
-                      border: seleccionado ? '2px solid #28a745' : 'none',
+                      cursor: 'pointer',
+                      border: seleccionado ? '3px solid #28a745' : '2px solid #ccc',
+                      borderRadius: '10px',
+                      padding: '10px',
+                      backgroundColor: seleccionado ? '#eafaf1' : 'white',
+                      transition: 'all 0.2s',
                     }}
-                  />
-                  <div style={{ fontWeight: seleccionado ? 'bold' : 'normal' }}>{ing.nombre}</div>
-                </div>
+                  >
+                    <img
+                      src={ing.foto}
+                      alt={ing.nombre}
+                      style={{
+                        width: '60px',
+                        height: '60px',
+                        objectFit: 'cover',
+                        borderRadius: '50%',
+                        marginBottom: '0.5rem',
+                        border: seleccionado ? '2px solid #28a745' : 'none',
+                      }}
+                    />
+                    <div style={{ fontWeight: seleccionado ? 'bold' : 'normal' }}>{ing.nombre}</div>
+                  </div>
+                </motion.div>
               );
             })}
           </div>
@@ -101,7 +105,6 @@ const BuscarRecetas = () => {
           </div>
         </div>
 
-        {/* Mensaje */}
         {mensaje && (
           <motion.div
             className="alert alert-warning"
@@ -118,39 +121,47 @@ const BuscarRecetas = () => {
           <div className="mt-4">
             <h4>Recetas encontradas:</h4>
             <div className="row">
-              {recetas.map((receta) => (
-                <div className="col-md-4" key={receta._id}>
+              {recetas.map((receta, index) => (
+                <motion.div
+                  key={receta._id}
+                  className="col-md-4 mb-4 text-center"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
                   <Link
                     to={`/recetas/${receta._id}`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-                    <motion.div
-                      className="card mb-3"
-                      whileHover={{ scale: 1.02 }}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
+                    <div
+                      style={{
+                        border: '2px solid #ccc',
+                        borderRadius: '10px',
+                        padding: '10px',
+                        backgroundColor: '#f9f9f9',
+                        cursor: 'pointer',
+                        height: '100%',
+                      }}
                     >
                       <img
-                        src={receta.foto}
-                        className="card-img-top"
+                        src={receta.foto || '/images/default-receta.png'}
                         alt={receta.nombre}
                         style={{
+                          width: '100%',
                           height: '200px',
                           objectFit: 'cover',
-                          width: '100%',
+                          borderRadius: '10px',
+                          marginBottom: '0.5rem',
                         }}
                       />
-                      <div className="card-body">
-                        <h5 className="card-title">{receta.nombre}</h5>
-                        <p className="card-text">
-                          Tipo: {receta.tipoComida} <br />
-                          Cocina: {receta.tipoCocina}
-                        </p>
-                      </div>
-                    </motion.div>
+                      <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{receta.nombre}</div>
+                      <p style={{ margin: 0, fontSize: '0.9rem', color: '#555' }}>
+                        {receta.tipoComida} - {receta.tipoCocina}
+                      </p>
+                    </div>
                   </Link>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

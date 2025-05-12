@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@splidejs/react-splide": "^0.7.12",
     "bootstrap": "^5.3.5",
     "framer-motion": "^12.10.5",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.5.3"
+    "react-router-dom": "^7.5.3",
+    "swiper": "^11.2.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
