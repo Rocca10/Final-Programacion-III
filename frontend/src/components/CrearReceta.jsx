@@ -72,7 +72,6 @@ const handleAddIngrediente = () => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log('Form que se envía:', form); // 🔍
   try {
     await api.post('/recetas', form);
     alert('Receta creada con éxito');
