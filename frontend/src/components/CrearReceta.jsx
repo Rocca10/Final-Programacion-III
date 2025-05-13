@@ -33,31 +33,50 @@ const CrearReceta = () => {
     fetchIngredientes();
   }, []);
 
-  const handleAddIngrediente = () => {
-    if (nuevoIngrediente.ingrediente && nuevoIngrediente.cantidad && nuevoIngrediente.unidad) {
-      setForm((prev) => ({
-        ...prev,
-        ingredientes: [...prev.ingredientes, nuevoIngrediente]
-      }));
-      setNuevoIngrediente({ ingrediente: '', cantidad: '', unidad: '' });
+const handleAddIngrediente = () => {
+  const { ingrediente, cantidad, unidad } = nuevoIngrediente;
+
+  if (ingrediente && cantidad && unidad) {
+    const cantidadNumerica = parseFloat(cantidad);
+    if (isNaN(cantidadNumerica) || cantidadNumerica <= 0) {
+      alert('Por favor, ingresá una cantidad válida.');
+      return;
     }
-  };
+
+    setForm((prev) => ({
+      ...prev,
+      ingredientes: [
+        ...prev.ingredientes,
+        {
+          ingrediente, // <-- ESTE CAMPO ES EL CORRECTO
+          cantidad: cantidadNumerica,
+          unidad
+        }
+      ]
+    }));
+
+    setNuevoIngrediente({ ingrediente: '', cantidad: '', unidad: '' });
+  }
+};
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await api.post('/recetas', form);
-      alert('Receta creada con éxito');
-      navigate('/recetas');
-    } catch (error) {
-      alert('Error al crear receta');
-      console.error(error);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log('Form que se envía:', form); // 🔍
+  try {
+    await api.post('/recetas', form);
+    alert('Receta creada con éxito');
+    navigate('/recetas');
+  } catch (error) {
+    console.error('Error al crear receta:', error);
+    alert('Error al crear receta');
+  }
+};
+
 
   return (
     <>
@@ -188,7 +207,7 @@ const CrearReceta = () => {
           </div>
           <div className="col-md-3">
             <select className="form-select" value={nuevoIngrediente.unidad} onChange={(e) => setNuevoIngrediente({ ...nuevoIngrediente, unidad: e.target.value })}>
-              <option value="">Unidad</option>
+              <option value="">Seleccionar Unidad</option>
               <option>unidades</option>
               <option>gramos</option>
               <option>kg</option>
@@ -196,6 +215,7 @@ const CrearReceta = () => {
               <option>lt</option>
               <option>tazas</option>
               <option>cucharadas</option>
+               <option>hojas</option>
             </select>
           </div>
           <div className="col-md-1">
@@ -204,16 +224,29 @@ const CrearReceta = () => {
         </div>
 
         {form.ingredientes.length > 0 && (
-          <ul className="list-group mt-3">
-            {form.ingredientes.map((i, idx) => {
-              const ing = ingredientesDisponibles.find((x) => x._id === i.ingrediente);
-              return (
-                <li key={idx} className="list-group-item">
-                  {ing?.nombre} - {i.cantidad} {i.unidad}
-                </li>
-              );
-            })}
-          </ul>
+<ul className="list-group mt-3">
+  {form.ingredientes.map((i, idx) => {
+    const ing = ingredientesDisponibles.find((x) => x._id === i.ingrediente);
+    return (
+      <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+        <span>{ing?.nombre} - {i.cantidad} {i.unidad}</span>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-danger"
+          onClick={() => {
+            setForm((prev) => ({
+              ...prev,
+              ingredientes: prev.ingredientes.filter((_, i2) => i2 !== idx)
+            }));
+          }}
+        >
+          🗑️
+        </button>
+      </li>
+    );
+  })}
+</ul>
+
         )}
 
         <button type="submit" className="btn btn-success mt-4">Guardar Receta</button>

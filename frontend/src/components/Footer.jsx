@@ -10,11 +10,8 @@ const Footer = () => {
         <p style={{ marginBottom: '0.5rem' }}>Recetas caseras hechas con amor.</p>
         <p style={{ fontSize: '0.9rem', color: '#aaa' }}>© {new Date().getFullYear()} Todos los derechos reservados.</p>
         <div style={{ marginTop: '1rem' }}>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ margin: '0 0.5rem', color: '#ffc107' }}>
-            Instagram
-          </a>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer" style={{ margin: '0 0.5rem', color: '#ffc107' }}>
-            Facebook
+          <a href="https://www.linkedin.com/in/nicolas-rocca-73a44919b/" target="_blank" rel="noreferrer" style={{ margin: '0 0.5rem', color: '#ffc107' }}>
+            Linkedin - Rocca Nicolas
           </a>
         </div>
       </div>

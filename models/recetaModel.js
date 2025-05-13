@@ -13,7 +13,7 @@ const recetaSchema = new mongoose.Schema({
     },
     tipoCocina: { 
         type: String, 
-        enum: ['Cocina Italiana', 'Cocina Mexicana', 'Cocina China', 'Cocina Japonesa', 'Cocina India', 'Cocina Mediterránea', 'Cocina Francesa','Cocina Española'], 
+        enum: ['Cocina Italiana', 'Cocina Mexicana', 'Cocina China', 'Cocina Japonesa', 'Cocina India', 'Cocina Mediterránea', 'Cocina Francesa','Cocina Española','Cocina Tradicional'], 
         required: true 
     },
     ingredientes: [
@@ -25,7 +25,7 @@ const recetaSchema = new mongoose.Schema({
     ],
     metodoCoccion: { 
         type: String, 
-        enum: ['Al horno', 'A la parrilla', 'A la plancha', 'Frito', 'Hervido', 'Al vapor', 'Crudo'], 
+        enum: ['Al horno', 'A la parrilla', 'A la plancha', 'Frito', 'Hervido', 'Al vapor', 'Crudo','Salteado'], 
         required: true 
     },
     tiempoPreparacion: { 

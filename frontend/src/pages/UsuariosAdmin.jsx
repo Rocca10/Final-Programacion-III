@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaUserEdit, FaTrashAlt, FaSave, FaTimes, FaPlus } from 'react-icons/fa';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion';
@@ -10,12 +11,12 @@ const UsuariosAdmin = () => {
   const [editandoId, setEditandoId] = useState(null);
   const [form, setForm] = useState({ username: '', password: '', role: 'CLIENTE' });
   const [permitido, setPermitido] = useState(null);
+  const [busqueda, setBusqueda] = useState('');
   const navigate = useNavigate();
 
   const verificarPermiso = () => {
     const token = localStorage.getItem('token');
     if (!token) return setPermitido(false);
-
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       setPermitido(payload.role === 'ADMIN');
@@ -68,11 +69,7 @@ const UsuariosAdmin = () => {
   const crearUsuario = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/usuarios', {
-        username: form.username,
-        password: form.password,
-        role: form.role,
-      });
+      await api.post('/usuarios', form);
       setMensaje('✅ Usuario creado correctamente');
       setForm({ username: '', password: '', role: 'CLIENTE' });
       cargarUsuarios();
@@ -82,16 +79,17 @@ const UsuariosAdmin = () => {
     }
   };
 
+  const filtrados = usuarios.filter((u) =>
+    u.username.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
   useEffect(() => {
     verificarPermiso();
   }, []);
 
   useEffect(() => {
-    if (permitido === true) {
-      cargarUsuarios();
-    } else if (permitido === false) {
-      navigate('/home');
-    }
+    if (permitido === true) cargarUsuarios();
+    else if (permitido === false) navigate('/home');
   }, [permitido]);
 
   if (permitido === null) return <p className="text-center mt-5">Verificando permisos...</p>;
@@ -121,10 +119,10 @@ const UsuariosAdmin = () => {
           </motion.div>
         )}
 
-        {/* Formulario de alta */}
+        {/* Formulario Alta */}
         <motion.div
           className="card p-4 mb-4 shadow-sm"
-          initial={{ opacity: 0, scale: 0.98 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
         >
@@ -140,7 +138,7 @@ const UsuariosAdmin = () => {
                   required
                 />
               </div>
-              <div className="col-md-4 mb-2">
+              <div className="col-md-3 mb-2">
                 <input
                   className="form-control"
                   type="password"
@@ -160,16 +158,27 @@ const UsuariosAdmin = () => {
                   <option value="ADMIN">ADMIN</option>
                 </select>
               </div>
-              <div className="col-md-1 mb-2 text-end">
-                <button type="submit" className="btn btn-primary w-100">Crear</button>
+              <div className="col-md-2 mb-2 text-end">
+                <button type="submit" className="btn btn-primary w-100">
+                  <FaPlus className="me-1" /> Crear
+                </button>
               </div>
             </div>
           </form>
         </motion.div>
 
-        {/* Tabla de usuarios */}
+        {/* Buscador */}
+        <input
+          type="text"
+          className="form-control mb-3"
+          placeholder="🔍 Buscar usuario por nombre..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+
+        {/* Tabla */}
         <motion.table
-          className="table table-hover table-striped shadow-sm"
+          className="table table-bordered table-hover shadow-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -182,19 +191,13 @@ const UsuariosAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            {usuarios.map((u) => (
-              <motion.tr
-                key={u._id}
-                whileHover={{ scale: 1.01 }}
-                transition={{ duration: 0.2 }}
-              >
+            {filtrados.map((u) => (
+              <motion.tr key={u._id} whileHover={{ scale: 1.01 }}>
                 <td>
                   {editandoId === u._id ? (
                     <input
                       value={form.username}
-                      onChange={(e) =>
-                        setForm({ ...form, username: e.target.value })
-                      }
+                      onChange={(e) => setForm({ ...form, username: e.target.value })}
                       className="form-control"
                     />
                   ) : (
@@ -205,47 +208,37 @@ const UsuariosAdmin = () => {
                   {editandoId === u._id ? (
                     <select
                       value={form.role}
-                      onChange={(e) =>
-                        setForm({ ...form, role: e.target.value })
-                      }
+                      onChange={(e) => setForm({ ...form, role: e.target.value })}
                       className="form-select"
                     >
                       <option value="CLIENTE">CLIENTE</option>
                       <option value="ADMIN">ADMIN</option>
                     </select>
                   ) : (
-                    u.role
+                    <span
+                      className={`badge ${u.role === 'ADMIN' ? 'bg-success' : 'bg-secondary'}`}
+                    >
+                      {u.role}
+                    </span>
                   )}
                 </td>
                 <td>
                   {editandoId === u._id ? (
                     <>
-                      <button
-                        className="btn btn-success btn-sm me-2"
-                        onClick={guardar}
-                      >
-                        Guardar
+                      <button className="btn btn-success btn-sm me-2" onClick={guardar}>
+                        <FaSave />
                       </button>
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={cancelar}
-                      >
-                        Cancelar
+                      <button className="btn btn-secondary btn-sm" onClick={cancelar}>
+                        <FaTimes />
                       </button>
                     </>
                   ) : (
                     <>
-                      <button
-                        className="btn btn-outline-primary btn-sm me-2"
-                        onClick={() => editar(u)}
-                      >
-                        Editar
+                      <button className="btn btn-outline-primary btn-sm me-2" onClick={() => editar(u)}>
+                        <FaUserEdit />
                       </button>
-                      <button
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() => eliminar(u._id)}
-                      >
-                        Eliminar
+                      <button className="btn btn-outline-danger btn-sm" onClick={() => eliminar(u._id)}>
+                        <FaTrashAlt />
                       </button>
                     </>
                   )}
