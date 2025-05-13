@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const RecetaDetalle = () => {
   const { id } = useParams();
@@ -72,6 +73,8 @@ const RecetaDetalle = () => {
     }
   };
 
+  const navigate = useNavigate();
+  
   useEffect(() => {
     cargarReceta();
     cargarComentarios();
@@ -83,6 +86,12 @@ const RecetaDetalle = () => {
     <>
       <Navbar />
       <div className="container mt-5 pt-4">
+        <div className="mb-4">
+  <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
+     ← Volver
+  </button>
+</div>
+
         <motion.div
           className="card shadow p-4 mb-4"
           initial={{ opacity: 0, y: 30 }}

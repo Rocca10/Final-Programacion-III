@@ -21,7 +21,7 @@ const recetaSchema = new mongoose.Schema({
             ingrediente: {  type: mongoose.Schema.Types.ObjectId,  ref: 'Ingrediente', required: true },
             cantidad: {   type: Number, required: true },
             unidad: {  type: String, enum: ['unidades', 'gramos', 'ml', 'tazas', 
-                                             'cucharadas', 'kg','lt'], required: true }}
+                                             'cucharadas', 'kg','lt','hojas'], required: true }}
     ],
     metodoCoccion: { 
         type: String, 

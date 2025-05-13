@@ -98,13 +98,27 @@ const BuscarRecetas = () => {
               );
             })}
           </div>
-          <div className="text-center">
-            <button onClick={buscarRecetas} className="btn btn-success mt-3">
+
+          {/* Botones de acción */}
+          <div className="text-center mt-3">
+            <button onClick={buscarRecetas} className="btn btn-success me-2">
               Buscar Recetas
             </button>
+
+            {seleccionados.length > 0 && (
+              <motion.button
+                className="btn btn-outline-danger"
+                onClick={() => setSeleccionados([])}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Deseleccionar todos
+              </motion.button>
+            )}
           </div>
         </div>
 
+        {/* Mensaje si no hay resultados */}
         {mensaje && (
           <motion.div
             className="alert alert-warning"
