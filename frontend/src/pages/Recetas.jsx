@@ -37,7 +37,16 @@ const Recetas = () => {
             textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
           }}
         >
-          🍴 Nuestras Recetas Destacadas
+          
+           <span
+  style={{
+    color: '#ffc107',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+  }}
+>
+  🍴 Nuestras Recetas Destacadas
+</span>
+
         </motion.h2>
 
         <div className="row">

@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import api from '../services/api';
 import { motion } from 'framer-motion';
 import SwiperHero from '../components/SwiperHero';
+import Footer from '../components/Footer';
 
 
 const Home = () => {
@@ -27,7 +28,7 @@ const Home = () => {
     <>
       <Navbar />
 
-<header style={{ position: 'relative', height: '500px', overflow: 'hidden' }}>
+<header style={{ position: 'relative', height: '900px', overflow: 'hidden' }}>
   {/* Fondo con swiper */}
   <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
     <SwiperHero />
@@ -64,16 +65,21 @@ const Home = () => {
       Bienvenido a <span style={{ color: '#ffc107' }}>ROCCETAS</span>
     </h1>
     <p style={{ fontSize: '1.3rem', marginTop: '1rem' }}>
-      Las mejores recetas caseras, para todos los gustos.
+      Las mejores recetas caseras, <span style={{ color: '#ffc107' }}> para todos los gustos.</span>
     </p>
 <div className="d-flex gap-3 mt-4">
-  <Link to="/buscar-recetas" className="btn btn-warning btn-lg shadow">
-    ¿Qué puedo cocinar?
-  </Link>
-  <Link to="/recetas" className="btn btn-warning btn-lg shadow">
-    Ver Recetas
-  </Link>
+  <motion.div whileHover={{ scale: 1.08 }} transition={{ type: 'spring', stiffness: 300 }}>
+    <Link to="/buscar-recetas" className="btn btn-warning btn-lg shadow">
+      ¿Qué puedo cocinar?
+    </Link>
+  </motion.div>
+  <motion.div whileHover={{ scale: 1.08 }} transition={{ type: 'spring', stiffness: 300 }}>
+    <Link to="/recetas" className="btn btn-warning btn-lg shadow">
+      Ver Recetas
+    </Link>
+  </motion.div>
 </div>
+
 
   </motion.div>
 </header>
@@ -82,19 +88,22 @@ const Home = () => {
       {/* Sección de recetas destacadas */}
       <main style={{ backgroundColor: '#fffdf9', padding: '4rem 1.5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <motion.h2
-            className="text-center mb-5"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            style={{
-              fontSize: '2.5rem',
-              fontFamily: 'Playfair Display, serif',
-              fontWeight: 'bold',
-            }}
-          >
-            Recetas destacadas 🍽️
-          </motion.h2>
+<motion.h2
+  className="text-center mb-5"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.5 }}
+  style={{
+    fontSize: '3rem',
+    fontFamily: 'Playfair Display, serif',
+    fontWeight: 800,
+    color: '#333',
+  }}
+>
+  <span style={{ color: '#ffc107' }}> RECETAS DESTACADAS 🍽️</span>
+ 
+</motion.h2>
+
 
           <div className="row">
             {recetas.map((receta) => (
@@ -128,13 +137,28 @@ const Home = () => {
             ))}
           </div>
 
-          <div className="text-center mt-4">
-            <Link to="/recetas" className="btn btn-outline-warning btn-lg">
-              Ver todas las recetas
-            </Link>
-          </div>
+<div className="text-center mt-4">
+  <motion.div whileHover={{ scale: 1.08 }} transition={{ type: 'spring', stiffness: 300 }}>
+    <Link
+      to="/recetas"
+      className="btn btn-lg shadow"
+      style={{
+        backgroundColor: '#ffc107', 
+        color: '#000',              
+        border: 'none',
+        fontWeight: '600'
+      }}
+    >
+      Ver todas las recetas
+    </Link>
+  </motion.div>
+</div>
+
+
+
         </div>
       </main>
+      <Footer/>
     </>
   );
 };

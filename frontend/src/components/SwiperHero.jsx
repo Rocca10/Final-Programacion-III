@@ -19,7 +19,7 @@ const SwiperHero = () => {
       loop
       autoplay={{ delay: 4000, disableOnInteraction: false }}
       className="mySwiper"
-      style={{ width: '100vw', height: '500px' }}
+      style={{ width: '100vw', height: '900px' }}
     >
       {slides.map((src, i) => (
         <SwiperSlide key={i}>
@@ -28,7 +28,7 @@ const SwiperHero = () => {
             alt={`Slide ${i}`}
             style={{
               width: '100%',
-              height: '500px',
+              height: '900px',
               objectFit: 'cover',
               objectPosition: 'center',
             }}

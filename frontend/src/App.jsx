@@ -9,11 +9,13 @@ import Registro from './pages/Registro';
 import UsuariosAdmin from './pages/UsuariosAdmin';
 import Perfil from './pages/Perfil';
 import RecetaDetalle from './pages/RecetaDetalle';
+import ScrollToTop from './components/ScrollToTop';
 
 
 function App() {
   return (
     <BrowserRouter>
+    <ScrollToTop />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/Registro" element={<Registro />} />
