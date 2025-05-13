@@ -23,17 +23,21 @@ const CrearReceta = () => {
   const UNIDADES_VALIDAS = ['unidades', 'gramos', 'kg', 'ml', 'lt', 'tazas', 'cucharadas', 'hojas'];
 
 
-  useEffect(() => {
-    const fetchIngredientes = async () => {
-      try {
-        const res = await api.get('/ingredientes');
-        setIngredientesDisponibles(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchIngredientes();
-  }, []);
+useEffect(() => {
+  const fetchIngredientes = async () => {
+    try {
+      const res = await api.get('/ingredientes');
+      const ordenados = res.data.sort((a, b) =>
+        a.nombre.localeCompare(b.nombre)
+      );
+      setIngredientesDisponibles(ordenados);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  fetchIngredientes();
+}, []);
+
 
 const handleAddIngrediente = () => {
   const { ingrediente, cantidad, unidad } = nuevoIngrediente;
