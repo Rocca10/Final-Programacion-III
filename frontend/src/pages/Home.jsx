@@ -28,7 +28,7 @@ const Home = () => {
     <>
       <Navbar />
 
-<header style={{ position: 'relative', height: '900px', overflow: 'hidden' }}>
+<header style={{ position: 'relative', height: '700px', overflow: 'hidden' }}>
   {/* Fondo con swiper */}
   <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
     <SwiperHero />

@@ -20,6 +20,8 @@ const CrearReceta = () => {
 
   const [ingredientesDisponibles, setIngredientesDisponibles] = useState([]);
   const [nuevoIngrediente, setNuevoIngrediente] = useState({ ingrediente: '', cantidad: '', unidad: '' });
+  const UNIDADES_VALIDAS = ['unidades', 'gramos', 'kg', 'ml', 'lt', 'tazas', 'cucharadas', 'hojas'];
+
 
   useEffect(() => {
     const fetchIngredientes = async () => {
@@ -228,21 +230,31 @@ const handleSubmit = async (e) => {
   {form.ingredientes.map((i, idx) => {
     const ing = ingredientesDisponibles.find((x) => x._id === i.ingrediente);
     return (
-      <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
-        <span>{ing?.nombre} - {i.cantidad} {i.unidad}</span>
-        <button
-          type="button"
-          className="btn btn-sm btn-outline-danger"
-          onClick={() => {
-            setForm((prev) => ({
-              ...prev,
-              ingredientes: prev.ingredientes.filter((_, i2) => i2 !== idx)
-            }));
-          }}
-        >
-          🗑️
-        </button>
-      </li>
+<li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+  <div className="d-flex align-items-center gap-3">
+    {ing?.foto && (
+      <img
+        src={ing.foto}
+        alt={ing.nombre}
+        style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px' }}
+      />
+    )}
+    <span>{ing?.nombre} - {i.cantidad} {i.unidad}</span>
+  </div>
+  <button
+    type="button"
+    className="btn btn-sm btn-outline-danger"
+    onClick={() => {
+      setForm((prev) => ({
+        ...prev,
+        ingredientes: prev.ingredientes.filter((_, i2) => i2 !== idx)
+      }));
+    }}
+  >
+    🗑️
+  </button>
+</li>
+
     );
   })}
 </ul>
