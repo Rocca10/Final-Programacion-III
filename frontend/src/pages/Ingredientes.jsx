@@ -4,7 +4,6 @@ import IngredienteForm from '../components/IngredienteForm';
 import Navbar from '../components/Navbar';
 import { motion } from 'framer-motion';
 
-// Función para verificar si el usuario logueado es admin
 const getEsAdmin = () => {
   const token = localStorage.getItem('token');
   if (!token) return false;
@@ -35,16 +34,25 @@ const Ingredientes = () => {
     cargarIngredientes();
   }, []);
 
+  const eliminarIngrediente = async (id) => {
+    if (!window.confirm('¿Estás seguro que querés eliminar este ingrediente?')) return;
+    try {
+      await api.delete(`/ingredientes/${id}`);
+      cargarIngredientes();
+    } catch (error) {
+      console.error('Error al eliminar ingrediente:', error);
+      alert('❌ Error al eliminar el ingrediente');
+    }
+  };
+
   return (
     <>
       <Navbar />
       <div className="container mt-5 pt-4">
         <h2 className="text-center mb-4">Gestión de Ingredientes 🧂</h2>
 
-        {/* Formulario solo para admin */}
         {esAdmin && <IngredienteForm onSuccess={cargarIngredientes} />}
 
-        {/* Listado visual de ingredientes */}
         {loading ? (
           <p>Cargando ingredientes...</p>
         ) : ingredientes.length === 0 ? (
@@ -59,6 +67,23 @@ const Ingredientes = () => {
                 transition={{ duration: 0.2 }}
               >
                 <div
+                  onMouseDown={(e) => {
+                    if (esAdmin) {
+                      e.currentTarget.longPressTimeout = setTimeout(() => {
+                        eliminarIngrediente(ing._id);
+                      }, 800); // 800ms para long press
+                    }
+                  }}
+                  onMouseUp={(e) => clearTimeout(e.currentTarget.longPressTimeout)}
+                  onMouseLeave={(e) => clearTimeout(e.currentTarget.longPressTimeout)}
+                  onTouchStart={(e) => {
+                    if (esAdmin) {
+                      e.currentTarget.longPressTimeout = setTimeout(() => {
+                        eliminarIngrediente(ing._id);
+                      }, 800);
+                    }
+                  }}
+                  onTouchEnd={(e) => clearTimeout(e.currentTarget.longPressTimeout)}
                   style={{
                     border: '2px solid #ccc',
                     borderRadius: '10px',
